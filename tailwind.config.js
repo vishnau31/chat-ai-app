@@ -57,7 +57,11 @@ module.exports = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+  		fontFamily: {
+  			jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+  			nunito: ['Nunito Sans', 'sans-serif'],
+  		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

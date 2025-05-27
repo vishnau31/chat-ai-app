@@ -1,5 +1,6 @@
 'use client';
 import { HomeScreenInput } from '@/components/ChatInput';
+import { MessageRenderer } from '@/components/MessageBox';
 import useWindowSize from '@/lib/useWindowSize';
 import Logo from '../../public/logo.svg'; // Adjust the path as necessary
 import Suggestions from '@/components/Suggestions';

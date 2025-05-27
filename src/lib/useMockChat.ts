@@ -1,0 +1,56 @@
+import { useState } from "react";
+
+export type ChatStatus = "idle" | "searching" | "browsing" | "streaming";
+
+export function getMockReply(input: string): string {
+    return `Sentient refers to the ability to experience feelings or sensations. It means being capable of sensing or feeling.
+  
+  ### Key Points:
+  - Sentient beings are able to feel things.
+  - The term is often used in phrases like "sentient beings."
+  - The word has roots in Latin.
+  
+  ### Related Concepts:
+  - Used in ethics and science fiction.`;
+  }
+
+  
+export function useMockChat() {
+  const [status, setStatus] = useState<ChatStatus>("idle");
+  const [streamedContent, setStreamedContent] = useState("");
+
+  const sendMessage = (input: string, onStart: () => void, onDone?: () => void) => {
+    setStatus("searching");
+    setStreamedContent("");
+
+    setTimeout(() => setStatus("browsing"), 1000);
+
+    setTimeout(() => {
+      setStatus("streaming");
+      const fullText = getMockReply(input);
+      simulateStream(fullText, (chunk) => {
+        setStreamedContent((prev) => prev + chunk);
+      }, onDone);
+    }, 2000);
+  };
+
+  return {
+    status,
+    streamedContent,
+    sendMessage,
+  };
+}
+
+// Simulates real-time token-by-token streaming
+function simulateStream(text: string, onChunk: (chunk: string) => void, onDone?: () => void) {
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i < text.length) {
+      onChunk(text[i]);
+      i++;
+    } else {
+      clearInterval(interval);
+      onDone?.();
+    }
+  }, 20);
+}

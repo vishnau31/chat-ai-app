@@ -1,93 +1,84 @@
 'use client';
 import { ChatScreenInput } from '@/components/ChatInput';
-import { useState } from 'react';
 import { Message } from '@/components/MessageBox';
 import { useMockChat } from '@/lib/useMockChat';
-import { send } from 'process';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
-const markdown = `
-Sentient refers to the ability to experience feelings or sensations.  
-It means being capable of [sensing or feeling](#), conscious of or responsive to sensations of seeing, hearing, feeling, tasting, or smelling.
-
----
-
-### **Key Points:**
-
-- Sentient beings are able to feel things or sense them.  
-- The term is used in phrases like “sentient beings” and “sentient creatures,” emphasizing those that don’t have life don’t have feelings.  
-- It is a formal adjective used in different contexts and languages.  
-- The word has roots in Latin, dating back to the early 1600s.
-
----
-
-### **Examples and Usage:**
-
-- Man is a sentient being.  
-- There was no sign of any sentient life or activity.  
-- Sentient is used in phrases like “being” to describe consciousness or the ability to feel.
-
----
-
-### **Related Concepts:**
-
-- Sentience in ethics determines moral consideration.  
-- In Asian religions, “sentience” is used in many contexts.  
-- In sci-fi, it describes AI’s ability to feel or think.
-`;
-
-type Chat = {
-  id: string;
+interface MessagePoint {
   title: string;
-  messages: Array<{
-    id: string;
-    content: string;
-    role: 'user' | 'assistant';
-    createdAt: string;
-  }>;
-  createdAt: string;
-  updatedAt: string;
+  points: string[];
+}
+
+interface MessageData {
+  description: string;
+  points: MessagePoint[];
+}
+
+const dummyMessages: MessageData = {
+  description:
+    'Sentient refers to the ability to experience feelings or sensations. It means being capable of sensing or feeling, conscious of or responsive to the sensations of seeing, hearing, feeling, tasting, or smelling.',
+  points: [
+    {
+      title: 'Key Points:',
+      points: [
+        'Sentient beings are able to feel things or sense them.',
+        "The term is often used in phrases like 'sentient beings' and 'sentient creatures,' emphasizing that things that don't have life don't have feelings.",
+        'Sentient is a formal adjective that can be used in different contexts and languages.',
+        'The word has its roots in Latin, with the earliest known use dating back to the early 1600s.',
+      ],
+    },
+    {
+      title: 'Examples and Usage:',
+      points: [
+        'Man is a sentient being.',
+        'There was no sign of any sentient life or activity.',
+        "Sentient is used with nouns like 'being' to describe entities that possess consciousness or the ability to feel.",
+      ],
+    },
+    {
+      title: 'Related Concepts:',
+      points: [
+        'Sentience is an important concept in ethics, particularly in utilitarianism, as it forms a basis for determining which entities deserve moral consideration.',
+        "In Asian religions, the word 'sentience' has been used to translate various concepts.",
+        "In science fiction, the word 'sentience' is often used to describe the ability of artificial intelligence or other non-human entities to experience consciousness or emotions.",
+      ],
+    },
+  ],
 };
 
 export default function ChatPage() {
-  const [chat, setChat] = useState<Chat>({
-    id: '1',
-    title: 'Sample Chat',
-    messages: [
-      {
-        id: '1',
-        content: 'Hello, how can I help you?',
-        role: 'assistant',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: '2',
-        content: 'What is the meaning of life?',
-        role: 'user',
-        createdAt: new Date().toISOString(),
-      },
-    ],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  });
-
+  const searchParams = useSearchParams();
   const { status, streamedContent, sendMessage } = useMockChat();
+  const question = searchParams.get('question');
+
+  useEffect(() => {
+    if (question) {
+      sendMessage(
+        question,
+        () => {}, // onStart callback
+        () => {}, // onDone callback
+      );
+    }
+  }, [question, sendMessage]);
 
   return (
     <div className="flex flex-col items-center">
       {/* Top Chat Section */}
       <div className="w-full max-w-5xl rounded-b-2xl border border-gray-200 border-t-0 px-6 py-4 bg-white">
-        <p className="text-lg font-medium text-black">What is Sentient?</p>
+        <p className="text-lg font-medium text-black">{question || 'Chat'}</p>
       </div>
       <div className="w-full max-w-4xl mt-4">
         <Message
-          message={markdown}
+          message=""
           isUser={false}
           status={status}
           streamedContent={streamedContent}
+          messageData={dummyMessages}
         />
       </div>
       {/* Chat Messages Section */}
-      <div className="absolute bottom-0 mb-2 w-full max-w-4xl">
+      <div className="fixed bottom-0 mb-2 w-full max-w-4xl">
         <ChatScreenInput sendMessage={sendMessage} />
       </div>
     </div>

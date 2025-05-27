@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
-export type ChatStatus = "idle" | "searching" | "browsing" | "streaming";
+export type ChatStatus = "idle" | "searching" | "browsing" | "streaming" | "error" | "complete";
 
 export function getMockReply(input: string): string {
     return `Sentient refers to the ability to experience feelings or sensations. It means being capable of sensing or feeling.
@@ -15,11 +15,11 @@ export function getMockReply(input: string): string {
   }
 
   
-export function useMockChat() {
+export const useMockChat = () => {
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [streamedContent, setStreamedContent] = useState("");
 
-  const sendMessage = (input: string, onStart: () => void, onDone?: () => void) => {
+  const sendMessage = useCallback((input: string, onStart: () => void, onDone?: () => void) => {
     setStatus("searching");
     setStreamedContent("");
 
@@ -32,14 +32,18 @@ export function useMockChat() {
         setStreamedContent((prev) => prev + chunk);
       }, onDone);
     }, 2000);
-  };
+
+    return () => {
+      // Cleanup logic if needed
+    };
+  }, []);
 
   return {
     status,
     streamedContent,
     sendMessage,
   };
-}
+};
 
 // Simulates real-time token-by-token streaming
 function simulateStream(text: string, onChunk: (chunk: string) => void, onDone?: () => void) {

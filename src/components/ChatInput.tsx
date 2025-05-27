@@ -1,11 +1,12 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, PlusCircle } from 'lucide-react';
 import { Textarea } from './ui/textarea';
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Input } from './ui/input';
+import { useRouter } from 'next/navigation';
 
 export function SegmentedToggle() {
   const [value, setValue] = useState('mini');
@@ -33,19 +34,53 @@ export function SegmentedToggle() {
   );
 }
 
-export const HomeScreenInput = () => {
-  const [message, setMessage] = useState('');
+interface HomeScreenInputProps {
+  value?: string;
+  onChange?: (value: string) => void;
+  formRef?: React.RefObject<HTMLFormElement>;
+}
+
+export const HomeScreenInput = ({ value = '', onChange, formRef }: HomeScreenInputProps) => {
+  const [localMessage, setLocalMessage] = useState(value);
+  const router = useRouter();
+
+  useEffect(() => {
+    setLocalMessage(value);
+  }, [value]);
+
+  const handleMessageChange = (newValue: string) => {
+    setLocalMessage(newValue);
+    onChange?.(newValue);
+  };
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (localMessage.trim()) {
+      router.push(`/chat?question=${encodeURIComponent(localMessage.trim())}`);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
 
   return (
-    <div className="w-full max-w-3xl border border-gray-100 shadow rounded-2xl px-3 py-2 flex items-center gap-2 bg-white">
-      {/* Attach button */}
-      <div className="flex flex-col w-full ">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className="w-full max-w-3xl border border-gray-100 shadow rounded-2xl px-3 py-2 flex items-center gap-2 bg-white"
+    >
+      <div className="flex flex-col w-full">
         <Textarea
           rows={2}
           className="w-full outline-none border-0 shadow-none focus:outline-none focus:ring-0 focus:border-0 focus:shadow-none resize-none"
           placeholder="Ask me anything..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={localMessage}
+          onChange={(e) => handleMessageChange(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <div className="flex flex-row justify-between mt-2">
           <div className="flex flex-row">
@@ -53,14 +88,14 @@ export const HomeScreenInput = () => {
               <PlusCircle />
               Attach
             </Button>
-            <SegmentedToggle value={'mini'} onChange={(val: any) => setMessage(val)} />
+            <SegmentedToggle />
           </div>
-          <Button variant="ghost" size="icon" className="ml-2 border rounded-full">
+          <Button type="submit" variant="ghost" size="icon" className="ml-2 border rounded-full">
             <ArrowRight />
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

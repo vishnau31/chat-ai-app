@@ -1,24 +1,27 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Home, Hourglass, Globe, Plus } from "lucide-react";
-import Image from "next/image";
-import clsx from "clsx";
+import { useState } from 'react';
+import { Home, Hourglass, Globe, Plus } from 'lucide-react';
+import Image from 'next/image';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 const navItems = [
-  { id: "home", icon: Home, label: "Home" },
-  { id: "timer", icon: Hourglass, label: "Timer" },
-  { id: "globe", icon: Globe, label: "Explore" },
+  { id: 'home', icon: Home, label: 'Home' },
+  { id: 'timer', icon: Hourglass, label: 'Timer' },
+  { id: 'globe', icon: Globe, label: 'Explore' },
 ];
 
 export const Sidebar = () => {
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState('home');
 
   return (
     <aside className="fixed top-0 left-0 h-screen w-16 bg-gray-100 border-r flex flex-col justify-between items-center py-4">
       {/* Section 1: Logo */}
       <div>
-        <Image src="/logo.svg" alt="Logo" width={24} height={24} />
+        <Link href="/">
+          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
+        </Link>
       </div>
 
       {/* Section 2: Nav Icons */}
@@ -31,15 +34,8 @@ export const Sidebar = () => {
             title={label}
           >
             {/* Icon */}
-            <Icon
-              className={clsx(
-                "w-5 h-5",
-                active === id ? "text-black" : "text-gray-400"
-              )}
-            />
-            {active === id && (
-              <span className="absolute right-0 h-5 w-1 bg-black rounded-l-full" />
-            )}
+            <Icon className={clsx('w-5 h-5', active === id ? 'text-black' : 'text-gray-400')} />
+            {active === id && <span className="absolute right-0 h-5 w-1 bg-black rounded-l-full" />}
           </button>
         ))}
       </div>

@@ -5,7 +5,6 @@ import { ArrowRight, PlusCircle } from 'lucide-react';
 import { Textarea } from './ui/textarea';
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Input } from './ui/input';
 import { useRouter } from 'next/navigation';
 
 export function SegmentedToggle() {
@@ -37,10 +36,9 @@ export function SegmentedToggle() {
 interface HomeScreenInputProps {
   value?: string;
   onChange?: (value: string) => void;
-  formRef?: React.RefObject<HTMLFormElement>;
 }
 
-export const HomeScreenInput = ({ value = '', onChange, formRef }: HomeScreenInputProps) => {
+export const HomeScreenInput = ({ value = '', onChange }: HomeScreenInputProps) => {
   const [localMessage, setLocalMessage] = useState(value);
   const router = useRouter();
 
@@ -69,7 +67,6 @@ export const HomeScreenInput = ({ value = '', onChange, formRef }: HomeScreenInp
 
   return (
     <form
-      ref={formRef}
       onSubmit={handleSubmit}
       className="w-full max-w-3xl border border-gray-100 shadow rounded-2xl px-3 py-2 flex items-center gap-2 bg-white"
     >

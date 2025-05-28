@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 
 export type ChatStatus = "idle" | "searching" | "browsing" | "streaming" | "error" | "complete";
 
-export function getMockReply(input: string): string {
+export function getMockReply(): string {
     return `Sentient refers to the ability to experience feelings or sensations. It means being capable of sensing or feeling.
   
   ### Key Points:
@@ -27,7 +27,7 @@ export const useMockChat = () => {
 
     setTimeout(() => {
       setStatus("streaming");
-      const fullText = getMockReply(input);
+      const fullText = getMockReply();
       simulateStream(fullText, (chunk) => {
         setStreamedContent((prev) => prev + chunk);
       }, () => {

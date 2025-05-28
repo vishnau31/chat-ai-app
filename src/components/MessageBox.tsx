@@ -1,6 +1,5 @@
-import { ChatStatus, useMockChat } from '@/lib/useMockChat';
+import { ChatStatus } from '@/lib/useMockChat';
 import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
 import { Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useState } from 'react';
 
@@ -46,7 +45,7 @@ const dummyMessages: Message = {
   ],
 };
 
-export const renderMessage = () => {
+export const MessageRenderer = () => {
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
 
@@ -116,17 +115,14 @@ export const renderMessage = () => {
   );
 };
 
-export const Message = ({
-  message,
-  isUser,
-  status,
-  streamedContent,
-}: {
-  message: string;
-  isUser: boolean;
-  streamedContent: string;
+interface MessageProps {
+  message?: string;
+  isUser?: boolean;
+  streamedContent?: string;
   status: ChatStatus;
-}) => {
+}
+
+export const Message = ({ status }: MessageProps) => {
   return (
     <div className="flex">
       {status === 'idle' ? null : (
@@ -140,7 +136,7 @@ export const Message = ({
             </div>
           ) : status === 'streaming' || status === 'complete' ? (
             <div className="prose prose-sm text-muted-foreground max-w-none text-black-500">
-              {renderMessage()}
+              <MessageRenderer />
             </div>
           ) : (
             <div className="prose prose-sm text-muted-foreground max-w-none">

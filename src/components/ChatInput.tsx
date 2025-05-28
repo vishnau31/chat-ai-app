@@ -3,11 +3,8 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   ArrowRight,
-  MonitorStopIcon,
   PlusCircle,
-  SquareDashedTopSolidIcon,
   SquareIcon,
-  StopCircle,
 } from 'lucide-react';
 import { Textarea } from './ui/textarea';
 
@@ -107,7 +104,7 @@ export const ChatScreenInput = ({
   sendMessage,
   processing,
 }: {
-  sendMessage: Function;
+  sendMessage: (input: string, onStart: () => void, onDone: () => void) => () => void
   processing: boolean;
 }) => {
   const [message, setMessage] = useState('');
@@ -136,7 +133,7 @@ export const ChatScreenInput = ({
         className="ml-2 border rounded-full"
         onClick={() => {
           if (message.trim()) {
-            sendMessage(message);
+            sendMessage(message, () => {}, () => {});
             setMessage('');
           }
         }}

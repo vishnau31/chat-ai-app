@@ -3,7 +3,7 @@ import { HomeScreenInput } from '@/components/ChatInput';
 import Logo from '../../public/logo.svg';
 import Suggestions from '@/components/Suggestions';
 import { Sidebar } from '@/components/ui/sidebar';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState('');

@@ -79,7 +79,10 @@ export default function ChatPage() {
       </div>
       {/* Chat Messages Section */}
       <div className="fixed bottom-0 mb-2 w-full max-w-4xl">
-        <ChatScreenInput sendMessage={sendMessage} />
+        <ChatScreenInput
+          sendMessage={sendMessage}
+          processing={status !== 'idle' && status !== 'complete' && status !== 'error'}
+        />
       </div>
     </div>
   );

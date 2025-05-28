@@ -138,7 +138,7 @@ export const Message = ({
             <div className="prose prose-sm text-muted-foreground max-w-none">
               <p className="animate-pulse text-black-500">Searching for relevant information...</p>
             </div>
-          ) : status === 'streaming' ? (
+          ) : status === 'streaming' || status === 'complete' ? (
             <div className="prose prose-sm text-muted-foreground max-w-none text-black-500">
               {renderMessage()}
             </div>

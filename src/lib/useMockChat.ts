@@ -19,7 +19,7 @@ export const useMockChat = () => {
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [streamedContent, setStreamedContent] = useState("");
 
-  const sendMessage = useCallback((input: string, onStart: () => void, onDone?: () => void) => {
+  const sendMessage = useCallback((input: string, onStart: () => void, onDone: () => void) => {
     setStatus("searching");
     setStreamedContent("");
 
@@ -30,7 +30,10 @@ export const useMockChat = () => {
       const fullText = getMockReply(input);
       simulateStream(fullText, (chunk) => {
         setStreamedContent((prev) => prev + chunk);
-      }, onDone);
+      }, () => {
+        setStatus("complete");
+        onDone();
+      });
     }, 2000);
 
     return () => {

@@ -1,7 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, PlusCircle } from 'lucide-react';
+import {
+  ArrowRight,
+  MonitorStopIcon,
+  PlusCircle,
+  SquareDashedTopSolidIcon,
+  SquareIcon,
+  StopCircle,
+} from 'lucide-react';
 import { Textarea } from './ui/textarea';
 
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -96,7 +103,13 @@ export const HomeScreenInput = ({ value = '', onChange }: HomeScreenInputProps) 
   );
 };
 
-export const ChatScreenInput = ({ sendMessage }: { sendMessage: Function }) => {
+export const ChatScreenInput = ({
+  sendMessage,
+  processing,
+}: {
+  sendMessage: Function;
+  processing: boolean;
+}) => {
   const [message, setMessage] = useState('');
 
   return (
@@ -128,7 +141,7 @@ export const ChatScreenInput = ({ sendMessage }: { sendMessage: Function }) => {
           }
         }}
       >
-        <ArrowRight />
+        {processing ? <SquareIcon /> : <ArrowRight />}
       </Button>
     </div>
   );
